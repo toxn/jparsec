@@ -15,6 +15,7 @@
  *****************************************************************************/
 package org.codehaus.jparsec;
 
+import org.codehaus.jparsec.parameters.Parameters;
 import org.codehaus.jparsec.pattern.CharPredicate;
 import org.codehaus.jparsec.pattern.CharPredicates;
 import org.codehaus.jparsec.pattern.Pattern;
@@ -524,6 +525,10 @@ public final class Scanners {
     return Parsers.sequence(begin, quoted.skipMany(), end).source();
   }
   
+  public static Parser<Void> nestedScanner(final Parser<?> outer, final Parser<Void> inner) {
+  	return nestedScanner(outer, inner, new Parameters());
+  }
+  	
   /**
    * A scanner that after character level {@code outer} succeeds,
    * subsequently feeds the recognized characters to {@code inner} for a nested scanning.
@@ -531,13 +536,13 @@ public final class Scanners {
    * <p> Is useful for scenarios like parsing string interpolation grammar, with parsing errors
    * correctly pointing to the right location in the original source.
    */
-  public static Parser<Void> nestedScanner(final Parser<?> outer, final Parser<Void> inner) {
+  public static Parser<Void> nestedScanner(final Parser<?> outer, final Parser<Void> inner, final Parameters params) {
     return new Parser<Void>() {
       @Override boolean apply(ParseContext ctxt) {
         int from = ctxt.at;
         if (!outer.apply(ctxt)) return false;
         ScannerState innerState = new ScannerState(
-            ctxt.module, ctxt.characters(), from, ctxt.at, ctxt.locator, ctxt.result);
+            ctxt.module, ctxt.characters(), from, ctxt.at, ctxt.locator, ctxt.result, params);
         ctxt.getTrace().startFresh(innerState);
         innerState.getTrace().setStateAs(ctxt.getTrace());
         return ctxt.applyNested(inner, innerState);

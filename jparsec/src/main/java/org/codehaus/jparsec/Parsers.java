@@ -165,7 +165,7 @@ public final class Parsers {
         if (!lexer.apply(ctxt)) return false;
         Token[] tokens = lexer.getReturn(ctxt);
         ParserState parserState = new ParserState(
-            ctxt.module, ctxt.source, tokens, 0, ctxt.locator, ctxt.getIndex(), tokens);
+            ctxt.module, ctxt.source, tokens, 0, ctxt.locator, ctxt.getIndex(), tokens, ctxt.params);
         ctxt.getTrace().startFresh(parserState);
         return ctxt.applyNested(parser, parserState);
       }
