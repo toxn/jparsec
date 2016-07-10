@@ -20,6 +20,7 @@ package org.codehaus.jparsec.functors;
  * 
  * @author Ben Yu
  */
+@FunctionalInterface
 public interface Map<From, To> {
   
   /** Maps {@code from} to the target object. */

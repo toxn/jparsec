@@ -20,6 +20,7 @@ package org.codehaus.jparsec.functors;
  * 
  * @author Ben Yu
  */
+@FunctionalInterface
 public interface Map2<A, B, T> {
   
   /** Maps {@code a} and {@code b} to the target object. */
