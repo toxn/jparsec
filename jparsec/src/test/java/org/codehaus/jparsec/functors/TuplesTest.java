@@ -24,6 +24,14 @@ public class TuplesTest {
   }
 
   @Test
+  public void testPairMap() {
+    Object[] arr = Tuples.pair("one", 1).map((a, b ) -> new Object[] {a,b});
+  	assertEquals("one", arr[0]);
+  	assertEquals(1, arr[1]);
+  }
+  
+  
+  @Test
   public void testTuple2() {
     Pair<String, Integer> pair = Tuples.tuple("one", 1);
     assertEquals("(one, 1)", pair.toString());
@@ -46,6 +54,14 @@ public class TuplesTest {
   }
 
   @Test
+  public void testTuple3Map() {
+    Object[] arr = Tuples.tuple("one", 1, 21).map((a, b, c) -> new Object[] {a,b,c});
+  	assertEquals("one", arr[0]);
+  	assertEquals(1, arr[1]);
+  	assertEquals(21, arr[2]);
+  }
+  
+  @Test
   public void testTuple4() {
     Tuple4<String, Integer, Integer, Integer> tuple = Tuples.tuple("123", 1, 2, 3);
     assertEquals("(123, 1, 2, 3)", tuple.toString());
@@ -59,6 +75,15 @@ public class TuplesTest {
         Tuples.tuple("123", 1, 1, 3), Tuples.tuple("123", 1, 2, 2), "abc");
   }
 
+  @Test
+  public void testTuple4Map() {
+    Object[] arr = Tuples.tuple("one", 1, 21, "two").map((a, b, c, d) -> new Object[] {a,b,c,d});
+  	assertEquals("one", arr[0]);
+  	assertEquals(1, arr[1]);
+  	assertEquals(21, arr[2]);
+  	assertEquals("two", arr[3]);
+  }
+  
   @Test
   public void testTuple5() {
     Tuple5<String, Integer, Integer, Integer, Integer> tuple = Tuples.tuple("1234", 1, 2, 3, 4);
@@ -74,5 +99,15 @@ public class TuplesTest {
         Tuples.tuple("1234", 1, 1, 3, 4), Tuples.tuple("1234", 1, 2, 2, 4), 
         Tuples.tuple("1234", 1, 2, 3, 3), "abc");
   }
+  
+	@Test
+	public void testTuple5Map() {
+		Object[] arr = Tuples.tuple("one", 1, 21, "two", 123).map((a, b, c, d, e) -> new Object[] { a, b, c, d, e });
+		assertEquals("one", arr[0]);
+		assertEquals(1, arr[1]);
+		assertEquals(21, arr[2]);
+		assertEquals("two", arr[3]);
+		assertEquals(123, arr[4]);
+	}
 
 }

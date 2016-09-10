@@ -49,4 +49,9 @@ public class Tuple4<A, B, C, D> extends Tuple3<A, B, C> {
   @Override public String toString() {
     return "(" + a + ", " + b + ", " + c + ", " + d + ")";
   }
+  
+	public <T> T map(Map4<A, B, C, D, T> map) {
+		return map.map(a, b, c, d);
+	}
+
 }

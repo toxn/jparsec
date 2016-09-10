@@ -49,4 +49,9 @@ public class Tuple3<A, B, C> extends Pair<A, B> {
   @Override public String toString() {
     return "(" + a + ", " + b + ", " + c + ")";
   }
+  
+	public <T> T map(Map3<A, B, C, T> map) {
+		return map.map(a, b, c);
+	}
+
 }

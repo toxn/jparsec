@@ -52,4 +52,9 @@ public class Tuple5<A, B, C, D, E> extends Tuple4<A, B, C, D>{
   public String toString() {
     return "(" + a + ", " + b + ", " + c + ", " + d + ", " + e + ")";
   }
+  
+	public <T> T map(Map5<A, B, C, D, E, T> map) {
+		return map.map(a, b, c, d, e);
+	}
+
 }

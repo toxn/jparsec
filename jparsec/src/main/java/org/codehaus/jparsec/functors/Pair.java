@@ -50,4 +50,8 @@ public class Pair<A, B> {
   @Override public String toString() {
     return "(" + a + ", " + b + ")";
   }
+  
+	public <T> T map(Map2<A, B, T> map) {
+		return map.map(a, b);
+	}
 }
