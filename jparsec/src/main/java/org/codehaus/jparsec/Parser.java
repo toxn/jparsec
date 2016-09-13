@@ -967,4 +967,19 @@ public abstract class Parser<T> {
   final T getReturn(ParseContext ctxt) {
     return (T) ctxt.result;
   }
+  
+  /**
+   * A {@link Parser} that runs {@code this} parser if current state is in position {@code n}.
+   * @param n
+   * @return
+   */
+  public final Parser<T> position(final int n) {
+  	return new Parser<T>() {
+			@Override
+			boolean apply(ParseContext ctxt) {
+				if (ctxt.locator.locate(ctxt.at).column - 1 != n) return false;
+				return Parser.this.apply(ctxt);
+			}
+  	};
+  }
 }
