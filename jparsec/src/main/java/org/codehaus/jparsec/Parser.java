@@ -21,6 +21,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
 
+import org.codehaus.jparsec.error.Location;
 import org.codehaus.jparsec.error.ParserException;
 import org.codehaus.jparsec.functors.Map;
 import org.codehaus.jparsec.functors.Map2;
@@ -817,6 +818,21 @@ public abstract class Parser<T> {
     return parse(source, Mode.PRODUCTION, params);
   }
 
+  /**
+   * Parses {@code source}.
+   */
+  public final T parse(Token[] tokens) {
+    ParserState state = new ParserState(
+        null, null, tokens, 0, null, 0, tokens, new Parameters());
+    // ctxt.getTrace().startFresh(parserState);
+    
+    if (!apply(state)) {
+    	throw new ParserException(state.renderError(), new Location(1, 1));
+    }
+    return getReturn(state);
+  }
+
+  
   /**
    * Parses source read from {@code readable}.
    */
