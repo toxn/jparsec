@@ -52,6 +52,16 @@ public final class Parsers {
       }
     });
   
+  /** A {@link Parser} that consumes a token. The token itself is returned from the parser. This can be usefull for partial parses.*/
+  public static final Parser<Token> ANY_TOKEN2 = token(new TokenMap<Token>() {
+      @Override public Token map(Token tok) {
+        return tok;
+      }
+      @Override public String toString() {
+        return "any token";
+      }
+    });
+  
   /** A {@link Parser} that retrieves the current index in the source. */
   public static final Parser<Integer> INDEX = new Parser<Integer>() {
     @Override boolean apply(final ParseContext ctxt) {
