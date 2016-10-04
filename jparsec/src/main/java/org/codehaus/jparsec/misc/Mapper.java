@@ -465,8 +465,9 @@ public abstract class Mapper<T> {
    * }
    * </pre>
    */
-  public static final Parser<?> skip(Parser<?> parser) {
-    return parser.map(SKIP);
+  @SuppressWarnings("unchecked")
+	public static final <T> Parser<T> skip(Parser<T> parser) {
+    return (Parser<T>) parser.map(SKIP);
   }
   
   /** 
