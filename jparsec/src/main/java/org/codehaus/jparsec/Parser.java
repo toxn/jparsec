@@ -196,7 +196,26 @@ public abstract class Parser<T> {
    * be collected in a list that will be returned by this function.
    */
   public final Parser<List<T>> until(Parser<?> parser) {
-    return parser.not().next(this).many().followedBy(parser.peek());
+//    return parser.not().next(this).many().followedBy(parser.peek());
+  	return new Parser<List<T>>() {
+			@Override
+			boolean apply(ParseContext ctxt) {
+				List<T> list = ListFactory.<T>arrayListFactory().newList();
+				Parser<?> p2 = parser.peek();
+				
+				while (true) {
+					if (p2.apply(ctxt)) break;
+					if (!Parser.this.apply(ctxt)) {
+						return false;
+					}
+					
+					list.add(Parser.this.getReturn(ctxt));
+				}
+				
+				ctxt.result = list;
+				return true;
+			}
+  	};
   }
 
   /**

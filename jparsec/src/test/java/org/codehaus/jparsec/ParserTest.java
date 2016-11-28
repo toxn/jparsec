@@ -145,6 +145,18 @@ public class ParserTest extends BaseMockTest {
   }
 
   @Test
+  public void testAnyUntil() {
+    Terminals terms = Terminals.operators(".", ",").words(Scanners.IDENTIFIER).build();
+    Parser<List<Token>> lexer = terms.tokenizer().lexer(Scanners.WHITESPACES.optional());
+    
+    Parser<List<Object>> parser = Parsers.ANY_TOKEN.until(terms.token(".")).followedBy(terms.token(".")).from(lexer);
+    
+    List<Object> lst2 = Arrays.<Object>asList(Tokens.fragment("AAA", Tokens.Tag.IDENTIFIER), Tokens.fragment(",", Tokens.Tag.RESERVED), Tokens.fragment("BBB", Tokens.Tag.IDENTIFIER));
+    assertEquals(lst2, parser.parse("AAA,BBB.", mode));
+    assertEquals(Arrays.asList(), parser.parse("."));
+  }
+  
+  @Test
   public void testFollowedBy() {
     assertEquals((Object) 123, INTEGER.followedBy(COMMA).parse("123,", mode));
     assertFailure(mode, FAILURE.followedBy(FOO), "", 1, 1, "failure");
