@@ -88,7 +88,7 @@ public final class Scanners {
    * 2 single quotes.
    */
   public static final Parser<String> SINGLE_QUOTE_STRING = quotedBy(
-      Patterns.regex("(('')|[^'])*").toScanner("quoted string"), isChar('\'')).source();
+  		Patterns.notString("'").or(Patterns.string("''")).many().toScanner("quoted string"), isChar('\'')).source();
 
   /**
    * Scanner with a pattern for double quoted string literal. Backslash '\' is
