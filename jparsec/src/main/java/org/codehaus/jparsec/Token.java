@@ -22,7 +22,7 @@ import org.codehaus.jparsec.internal.util.Objects;
  * 
  * @author Ben Yu
  */
-public final class Token {
+public class Token {
   
   private final int ind;
   private final int len;
