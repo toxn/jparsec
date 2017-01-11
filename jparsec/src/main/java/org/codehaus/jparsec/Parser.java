@@ -840,9 +840,9 @@ public abstract class Parser<T> {
   /**
    * Parses {@code source}.
    */
-  public final T parse(Token[] tokens) {
+  public final T parse(Token[] tokens, Parameters params) {
     ParserState state = new ParserState(
-        null, null, tokens, 0, null, 0, tokens, new Parameters());
+        null, null, tokens, 0, null, 0, tokens, params);
     // ctxt.getTrace().startFresh(parserState);
     
     if (!apply(state)) {
@@ -851,6 +851,12 @@ public abstract class Parser<T> {
     return getReturn(state);
   }
 
+  /**
+   * Parses {@code source}.
+   */
+  public final T parse(Token[] tokens) {
+  	return parse(tokens, new Parameters());
+  }
   
   /**
    * Parses source read from {@code readable}.
@@ -859,6 +865,14 @@ public abstract class Parser<T> {
     return parse(read(readable));
   }
 
+  /**
+   * Parses source read from {@code readable}.
+   */
+  public final T parse(Readable readable, Parameters params) throws IOException {
+    return parse(read(readable), params);
+  }
+
+  
   /**
    * Parses {@code source} under the given {@code mode}. For example: <pre>
    *   try {
