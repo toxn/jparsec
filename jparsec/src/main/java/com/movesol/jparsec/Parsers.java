@@ -72,6 +72,18 @@ public final class Parsers {
       return "getIndex";
     }
   };
+
+  /** A {@link Parser} that retrieves the current token index. */
+  public static final Parser<Integer> TOKEN_INDEX = new Parser<Integer>() {
+    @Override boolean apply(final ParseContext ctxt) {
+      ctxt.result = ctxt.at;
+      return true;
+    }
+    @Override public String toString() {
+      return "getTokenIndex";
+    }
+  };
+
   
   @SuppressWarnings("rawtypes")
   private static final Parser ALWAYS = constant(null);
