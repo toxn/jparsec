@@ -614,4 +614,12 @@ public class ScannersTest {
     Scanners.DOUBLE_QUOTE_STRING.parse(test);
   }
 
+  @Test
+  public void testCustomScanner() {
+  	Parser<Void> scanner = Scanners.from(a -> {
+  		return a.read() == 'a';
+  	}, "test");
+  	assertFailure(mode, scanner, "b", 1, 1);
+  	assertScanner(mode, scanner, "a1", "1");
+  }
 }

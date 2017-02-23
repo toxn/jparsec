@@ -553,6 +553,61 @@ public final class Scanners {
     };
   }
   
+  public static class CharacterScannerReader implements CharacterReader {
+
+  	private CharSequence src;
+		private int pos;
+		private int initPos;
+		
+		public CharacterScannerReader(CharSequence src, int pos) {
+  		this.src = src;
+  		this.pos = pos;
+  		this.initPos = pos;
+  	}
+  	
+		@Override
+		public int read() {
+			if (src.length() == pos) return EOF;
+			return src.charAt(pos++);
+		}
+
+		public int getPosition() {
+			return pos;
+		}
+
+		@Override
+		public void rewind(int n) {
+			pos -= n;
+			if (pos < initPos) pos = initPos;
+		}
+
+		@Override
+		public void rewind() {
+			rewind(1);
+		}
+  }
+  
+  public static Parser<Void> from(final Scanner scanner, final String name) {
+  	return new Parser<Void>() {
+			@Override
+			boolean apply(final ParseContext ctxt) {
+				final int from = ctxt.at;
+				final CharSequence src = ctxt.characters();
+				
+				CharacterScannerReader cscanner = new CharacterScannerReader(src, from);
+				
+				if (!scanner.scan(cscanner)) {
+					ctxt.missing(name);
+					return false;
+				}
+
+				ctxt.next(cscanner.getPosition() - from);
+				ctxt.result = null;
+				return true;
+			}
+  	};
+  }
+  
   /**
    * Matches a character if the input has at least 1 character, or if the input has at least 2
    * characters with the first 2 characters not being {@code c1} and {@code c2}.
