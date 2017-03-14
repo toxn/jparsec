@@ -323,11 +323,7 @@ public abstract class Parser<T> {
 					ctxt.result = map.map(Parser.this.getReturn(ctxt));
 					if (ctxt instanceof ParserState) {
 						int last = ctxt.at - 1;
-						MapListener listener = ctxt.params.getMapListener();
-						if (listener != null && first < ((ParserState) ctxt).input.length) {
-							listener.onMap(ctxt.result, new ParseLevelState(((ParserState) ctxt).input[first],
-									((ParserState) ctxt).input[last], ctxt.params));
-						}
+						Parsers.applyListener(ctxt, first, last);
 					}
 				}
 				return r;

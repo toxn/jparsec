@@ -50,6 +50,8 @@ abstract class ParseContext {
   /** The current parse result. */
   Object result;
 
+  Object lastListenerTarget;
+  
   private ParserTrace trace = new ParserTrace() {
     @Override public void push(String name) {}
     @Override public void pop() {}

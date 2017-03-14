@@ -182,7 +182,7 @@ public final class OperatorTable<T> {
       }
       end = i;
       Parser<?> p = slice(ops, begin, end);
-      ret = build(p, associativity, ret);
+      ret = Parsers.listener(build(p, associativity, ret));
       begin = i;
       precedence = ops[i].precedence;
       associativity = ops[i].associativity;
@@ -191,7 +191,7 @@ public final class OperatorTable<T> {
       end = ops.length;
       associativity = ops[begin].associativity;
       Parser<?> p = slice(ops, begin, end);
-      ret = build(p, associativity, ret);
+      ret = Parsers.listener(build(p, associativity, ret));
     }
     return ret;
   }

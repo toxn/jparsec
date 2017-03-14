@@ -31,6 +31,8 @@ import com.movesol.jparsec.functors.Tuple4;
 import com.movesol.jparsec.functors.Tuple5;
 import com.movesol.jparsec.internal.annotations.Private;
 import com.movesol.jparsec.internal.util.Lists;
+import com.movesol.jparsec.parameters.MapListener;
+import com.movesol.jparsec.parameters.ParseLevelState;
 
 /**
  * Provides common {@link Parser} implementations.
@@ -964,6 +966,35 @@ public final class Parsers {
       }
     };
   }
+ 
+  public static <T> Parser<T> listener(Parser<T> parser) {
+  	return new Parser<T>() {
+
+  		@Override
+  		boolean apply(ParseContext ctxt) {
+      	int first = ctxt.at;
+    		final boolean r = parser.apply(ctxt);
+				if (r) {
+					if (ctxt instanceof ParserState) {
+						int last = ctxt.at - 1;
+						Parsers.applyListener(ctxt, first, last);
+					}
+				}
+				return r;
+  		}
+  	};
+  }  
+
+  protected static <T> void applyListener(ParseContext ctxt, int first, int last) {
+		MapListener listener = ctxt.params.getMapListener();
+		if (listener != null && first < ((ParserState) ctxt).input.length && ctxt.lastListenerTarget != ctxt.result) {
+			listener.onMap(ctxt.result, new ParseLevelState(((ParserState) ctxt).input[first],
+					((ParserState) ctxt).input[last], ctxt.params));
+			ctxt.lastListenerTarget = ctxt.result;
+		}
+
+  }
   
   private Parsers() {}
 }
+
