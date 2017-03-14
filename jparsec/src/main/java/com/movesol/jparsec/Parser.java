@@ -28,9 +28,7 @@ import com.movesol.jparsec.functors.Map2;
 import com.movesol.jparsec.functors.Maps;
 import com.movesol.jparsec.internal.annotations.Private;
 import com.movesol.jparsec.internal.util.Checks;
-import com.movesol.jparsec.parameters.MapListener;
 import com.movesol.jparsec.parameters.Parameters;
-import com.movesol.jparsec.parameters.ParseLevelState;
 
 /**
  * Defines grammar and encapsulates parsing logic. A {@link Parser} takes as input a
@@ -836,6 +834,13 @@ public abstract class Parser<T> {
   /**
    * Parses {@code source}.
    */
+  public final T parse(CharSequence source, String module, Parameters params) {
+    return parse(source, Mode.PRODUCTION, module, params);
+  }
+  
+  /**
+   * Parses {@code source}.
+   */
   public final T parse(Token[] tokens, Parameters params) {
     ParserState state = new ParserState(
         null, null, tokens, 0, null, 0, tokens, params);
@@ -847,6 +852,20 @@ public abstract class Parser<T> {
     return getReturn(state);
   }
 
+  /**
+   * Parses {@code source}.
+   */
+  public final T parse(Token[] tokens, String module, Parameters params) {
+    ParserState state = new ParserState(
+        module, null, tokens, 0, null, 0, tokens, params);
+    // ctxt.getTrace().startFresh(parserState);
+    
+    if (!apply(state)) {
+    	throw new ParserException(state.renderError(), new Location(1, 1));
+    }
+    return getReturn(state);
+  }
+  
   /**
    * Parses {@code source}.
    */
@@ -882,7 +901,7 @@ public abstract class Parser<T> {
    * @since 2.3
    */
   public final T parse(CharSequence source, Mode mode) {
-    return mode.run(this, source, new Parameters());
+    return mode.run(this, source, null, new Parameters());
   }
 
   /**
@@ -899,9 +918,26 @@ public abstract class Parser<T> {
    */
   public final T parse(CharSequence source, Mode mode, Parameters params) {
 		params.setMode(mode);
-		return mode.run(this, source, params);
+		return mode.run(this, source, null, params);
   }
 
+  /**
+   * Parses {@code source} under the given {@code mode}. For example: <pre>
+   *   try {
+   *     parser.parse(text, Mode.DEBUG);
+   *   } catch (ParserException e) {
+   *     ParseTree parseTree = e.getParseTree();
+   *     ...
+   *   }
+   * </pre>
+   *
+   * @since 2.3
+   */
+  public final T parse(CharSequence source, Mode mode, String module, Parameters params) {
+		params.setMode(mode);
+		return mode.run(this, source, module, params);
+  }
+  
   /**
    * Parses {@code source} and returns a {@link ParseTree} corresponding to the syntactical
    * structure of the input. Only {@link #label labeled} parser nodes are represented in the parse
@@ -944,8 +980,8 @@ public abstract class Parser<T> {
   public enum Mode {
     /** Default mode. Used for production. */
     PRODUCTION {
-      @Override <T> T run(Parser<T> parser, CharSequence source, Parameters params) {
-        return new ScannerState(source, params).run(parser.followedBy(Parsers.EOF));
+      @Override <T> T run(Parser<T> parser, CharSequence source, String module, Parameters params) {
+        return new ScannerState(module, source, params).run(parser.followedBy(Parsers.EOF));
       }
     },
 
@@ -953,14 +989,14 @@ public abstract class Parser<T> {
      * Debug mode. {@link ParserException#getParseTree} can be used to inspect partial parse result.
      */
     DEBUG {
-      @Override <T> T run(Parser<T> parser, CharSequence source, Parameters params) {
+      @Override <T> T run(Parser<T> parser, CharSequence source, String module, Parameters params) {
         ScannerState state = new ScannerState(source, params);
         state.enableTrace("root");
         return state.run(parser.followedBy(Parsers.EOF));
       }
     }
     ;
-    abstract <T> T run(Parser<T> parser, CharSequence source, Parameters params);
+    abstract <T> T run(Parser<T> parser, CharSequence source, String module, Parameters params);
   }
 
   /**

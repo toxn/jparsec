@@ -6,14 +6,20 @@ public class ParseLevelState {
   private Token first;
   private Token last;
   private Parameters params;
-
-  public ParseLevelState(Token first, Token last, Parameters params) {
+  private String module;
+  
+  public ParseLevelState(Token first, Token last, String module, Parameters params) {
     this.first = first;
     this.last = last;
+    this.module = module;
     this.params = params;
   }
   
-  public Token getFirstToken() {
+  public String getModule() {
+		return module;
+	}
+
+	public Token getFirstToken() {
     return first;
   }
 

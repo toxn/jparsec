@@ -86,6 +86,16 @@ public final class Parsers {
     }
   };
 
+  /** A {@link Parser} that retrieves the current token index. */
+  public static final Parser<String> MODULE = new Parser<String>() {
+    @Override boolean apply(final ParseContext ctxt) {
+      ctxt.result = ctxt.module;
+      return true;
+    }
+    @Override public String toString() {
+      return "module";
+    }
+  };
   
   @SuppressWarnings("rawtypes")
   private static final Parser ALWAYS = constant(null);
@@ -989,7 +999,7 @@ public final class Parsers {
 		MapListener listener = ctxt.params.getMapListener();
 		if (listener != null && first < ((ParserState) ctxt).input.length && ctxt.lastListenerTarget != ctxt.result) {
 			listener.onMap(ctxt.result, new ParseLevelState(((ParserState) ctxt).input[first],
-					((ParserState) ctxt).input[last], ctxt.params));
+					((ParserState) ctxt).input[last], ctxt.module, ctxt.params));
 			ctxt.lastListenerTarget = ctxt.result;
 		}
 
