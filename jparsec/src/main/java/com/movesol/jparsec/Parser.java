@@ -849,6 +849,11 @@ public abstract class Parser<T> {
     if (!apply(state)) {
     	throw new ParserException(state.renderError(), new Location(1, 1));
     }
+    
+    if (!Parsers.EOF.apply(state)) {
+     	throw new ParserException(state.renderError(), new Location(1, 1));
+    }
+    
     return getReturn(state);
   }
 
@@ -863,6 +868,11 @@ public abstract class Parser<T> {
     if (!apply(state)) {
     	throw new ParserException(state.renderError(), new Location(1, 1));
     }
+
+    if (!Parsers.EOF.apply(state)) {
+     	throw new ParserException(state.renderError(), new Location(1, 1));
+    }
+    
     return getReturn(state);
   }
   
