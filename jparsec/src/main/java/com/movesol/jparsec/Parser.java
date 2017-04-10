@@ -842,23 +842,47 @@ public abstract class Parser<T> {
    * Parses {@code source}.
    */
   public final T parse(Token[] tokens, Parameters params) {
-  	return parse(tokens, null, params);
+  	return parse(tokens, null, null, params);
+  }
+
+  /**
+   * Parses {@code source}.
+   */
+  public final T parse(Token[] tokens, SourceLocator loc, Parameters params) {
+  	return parse(tokens, null, loc, params);
   }
 
   /**
    * Parses {@code source}.
    */
   public final T parse(Token[] tokens, String module, Parameters params) {
+  	return parse(tokens, module, null, params);
+  }
+  
+  /**
+   * Parses {@code source}.
+   */
+  public final T parse(Token[] tokens, String module, SourceLocator loc, Parameters params) {
+  	
+  	if (params == null) params = new Parameters();
+  	
     ParserState state = new ParserState(
         module, null, tokens, 0, null, 0, tokens, params);
-    // ctxt.getTrace().startFresh(parserState);
     
     if (!apply(state)) {
-    	throw new ParserException(state.renderError(), null);
+    	Location l = null;
+    	if (loc != null) {
+    		l = loc.locate(state.input[state.at].index());
+    	}
+    	throw new ParserException(state.renderError(), l);
     }
 
     if (!Parsers.EOF.apply(state)) {
-     	throw new ParserException(state.renderError(), null);
+    	Location l = null;
+    	if (loc != null) {
+    		l = loc.locate(state.input[state.at].index());
+    	}
+     	throw new ParserException(state.renderError(), l);
     }
     
     return getReturn(state);
@@ -870,7 +894,7 @@ public abstract class Parser<T> {
   public final T parse(Token[] tokens) {
   	return parse(tokens, new Parameters());
   }
-  
+
   /**
    * Parses source read from {@code readable}.
    */
