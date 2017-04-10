@@ -689,7 +689,7 @@ public abstract class Parser<T> {
           return false;
         }
         int len = ctxt.getIndex() - begin;
-        Token token = new Token(begin, len, ctxt.result);
+        Token token = new Token(begin, len, ctxt.result, ctxt.module);
         ctxt.result = token;
         return true;
       }
@@ -862,7 +862,8 @@ public abstract class Parser<T> {
   /**
    * Parses {@code source}.
    */
-  public final T parse(Token[] tokens, String module, SourceLocator loc, Parameters params) {
+  @SuppressWarnings("deprecation")
+	public final T parse(Token[] tokens, String module, SourceLocator loc, Parameters params) {
   	
   	if (params == null) params = new Parameters();
   	
@@ -874,7 +875,7 @@ public abstract class Parser<T> {
     	if (loc != null) {
     		l = loc.locate(state.input[state.at].index());
     	}
-    	throw new ParserException(state.renderError(), l);
+    	throw new ParserException(state.renderError(),  state.input[state.at].module(), l);
     }
 
     if (!Parsers.EOF.apply(state)) {
@@ -882,7 +883,7 @@ public abstract class Parser<T> {
     	if (loc != null) {
     		l = loc.locate(state.input[state.at].index());
     	}
-     	throw new ParserException(state.renderError(), l);
+     	throw new ParserException(state.renderError(), state.input[state.at].module(), l);
     }
     
     return getReturn(state);
