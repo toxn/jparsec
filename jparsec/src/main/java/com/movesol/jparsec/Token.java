@@ -27,16 +27,28 @@ public class Token {
   private final int ind;
   private final int len;
   private final Object value;
-
+  private final String module;
+  
   /**
    * @param index the starting index.
    * @param length the length of the token.
    * @param value the token value.
    */
   public Token(int index, int length, Object value) {
+  	this(index, length, value, null);
+  }
+
+  /**
+   * @param index the starting index.
+   * @param length the length of the token.
+   * @param value the token value.
+   * @param module the token module.
+   */
+  public Token(int index, int length, Object value, String module) {
     this.ind = index;
     this.len = length;
     this.value = value;
+    this.module = module;
   }
   
   /** Returns the length of the token. */
@@ -52,6 +64,11 @@ public class Token {
   /** Returns the token value. */
   public Object value() {
     return value;
+  }
+  
+  /** Returns the token module. */
+  public String module() {
+  	return module;
   }
   
   /** Returns the string representation of the token value. */
