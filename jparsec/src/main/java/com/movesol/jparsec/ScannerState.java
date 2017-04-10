@@ -27,11 +27,11 @@ final class ScannerState extends ParseContext {
   private final int end;
   
   ScannerState(CharSequence source, Parameters params) {
-    this(null, source, 0, new SourceLocator(source), params);
+    this(null, source, 0, new CharSequenceSourceLocator(source), params);
   }
 
   ScannerState(String module, CharSequence source, Parameters params) {
-    this(module, source, 0, new SourceLocator(source), params);
+    this(module, source, 0, new CharSequenceSourceLocator(source), params);
   }
   
   ScannerState(String module, CharSequence source, int from, SourceLocator locator, Parameters params) {

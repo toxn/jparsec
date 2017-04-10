@@ -842,19 +842,7 @@ public abstract class Parser<T> {
    * Parses {@code source}.
    */
   public final T parse(Token[] tokens, Parameters params) {
-    ParserState state = new ParserState(
-        null, null, tokens, 0, null, 0, tokens, params);
-    // ctxt.getTrace().startFresh(parserState);
-    
-    if (!apply(state)) {
-    	throw new ParserException(state.renderError(), new Location(1, 1));
-    }
-    
-    if (!Parsers.EOF.apply(state)) {
-     	throw new ParserException(state.renderError(), new Location(1, 1));
-    }
-    
-    return getReturn(state);
+  	return parse(tokens, null, params);
   }
 
   /**
@@ -866,11 +854,11 @@ public abstract class Parser<T> {
     // ctxt.getTrace().startFresh(parserState);
     
     if (!apply(state)) {
-    	throw new ParserException(state.renderError(), new Location(1, 1));
+    	throw new ParserException(state.renderError(), null);
     }
 
     if (!Parsers.EOF.apply(state)) {
-     	throw new ParserException(state.renderError(), new Location(1, 1));
+     	throw new ParserException(state.renderError(), null);
     }
     
     return getReturn(state);
@@ -1019,7 +1007,7 @@ public abstract class Parser<T> {
    */
   @Deprecated
   public final T parse(CharSequence source, String moduleName) {
-    return new ScannerState(moduleName, source, 0, new SourceLocator(source), new Parameters())
+    return new ScannerState(moduleName, source, 0, new CharSequenceSourceLocator(source), new Parameters())
         .run(followedBy(Parsers.EOF));
   }
 
