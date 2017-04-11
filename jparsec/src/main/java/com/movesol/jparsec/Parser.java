@@ -873,7 +873,7 @@ public abstract class Parser<T> {
     if (!apply(state)) {
     	Location l = null;
     	if (loc != null) {
-    		l = loc.locate(state.input[state.at].index());
+    		l = loc.locate(state.input[state.at].index(), state.input[state.at].module());
     	}
     	throw new ParserException(state.renderError(),  state.input[state.at].module(), l);
     }
@@ -881,7 +881,7 @@ public abstract class Parser<T> {
     if (!Parsers.EOF.apply(state)) {
     	Location l = null;
     	if (loc != null) {
-    		l = loc.locate(state.input[state.at].index());
+    		l = loc.locate(state.input[state.at].index(), state.input[state.at].module());
     	}
      	throw new ParserException(state.renderError(), state.input[state.at].module(), l);
     }
@@ -1081,7 +1081,7 @@ public abstract class Parser<T> {
   	return new Parser<T>() {
 			@Override
 			boolean apply(ParseContext ctxt) {
-				if (ctxt.locator.locate(ctxt.at).column - 1 != n) return false;
+				if (ctxt.locator.locate(ctxt.at, null).column - 1 != n) return false;
 				return Parser.this.apply(ctxt);
 			}
   	};

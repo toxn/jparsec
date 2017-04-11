@@ -19,18 +19,18 @@ public class DefaultSourceLocatorTest {
   @Test
   public void testLocate_onlyOneLineBreakCharacter() {
     SourceLocator locator = new CharSequenceSourceLocator("\n");
-    Location location = locator.locate(0);
+    Location location = locator.locate(0, null);
     assertEquals(new Location(1, 1), location);
-    assertEquals(location, locator.locate(0));
-    assertEquals(new Location(2, 1), locator.locate(1));
+    assertEquals(location, locator.locate(0, null));
+    assertEquals(new Location(2, 1), locator.locate(1, null));
   }
 
   @Test
   public void testLocate_emptySource() {
     SourceLocator locator = new CharSequenceSourceLocator("");
-    Location location = locator.locate(0);
+    Location location = locator.locate(0, null);
     assertEquals(new Location(1, 1), location);
-    assertEquals(location, locator.locate(0));
+    assertEquals(location, locator.locate(0, null));
   }
 
   @Test
@@ -186,8 +186,8 @@ public class DefaultSourceLocatorTest {
   @Test
   public void testLocate() {
     SourceLocator locator = new CharSequenceSourceLocator("foo\nbar\n", 2, 3);
-    assertEquals(new Location(3, 4), locator.locate(7));
-    assertEquals(new Location(2, 5), locator.locate(2)); // this will call lookup()
+    assertEquals(new Location(3, 4), locator.locate(7, null));
+    assertEquals(new Location(2, 5), locator.locate(2, null)); // this will call lookup()
   }
   
   private static void addLineBreaks(CharSequenceSourceLocator locator, int... indices) {

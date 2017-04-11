@@ -74,7 +74,7 @@ final public class CharSequenceSourceLocator implements SourceLocator {
   }
   
   @Override
-	public Location locate(int index) {
+	public Location locate(int index, String module) {
     return (index < nextIndex) ? lookup(index) : scanTo(index);
   }
   

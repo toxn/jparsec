@@ -4,6 +4,6 @@ import com.movesol.jparsec.error.Location;
 
 public interface SourceLocator {
 
-	public Location locate(int index);
+	public Location locate(int index, String module);
 
 }

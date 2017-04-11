@@ -82,7 +82,7 @@ final class ScannerState extends ParseContext {
     if (!applyWithExceptionWrapped(parser)) {
       @SuppressWarnings("deprecation")
       ParserException exception =  new ParserException(
-          renderError(), module, locator.locate(errorIndex()));
+          renderError(), module, locator.locate(errorIndex(), module));
       exception.setParseTree(buildErrorParseTree());
       throw exception;
     }
@@ -96,7 +96,7 @@ final class ScannerState extends ParseContext {
       if (e instanceof ParserException) throw (ParserException) e;
       @SuppressWarnings("deprecation")
       ParserException wrapper =
-          new ParserException(e, null, module, locator.locate(getIndex()));
+          new ParserException(e, null, module, locator.locate(getIndex(), module));
       // Use the successful parse tree because we are interrupted abruptly by an exception
       // So no need to take the "farthest error path".
       wrapper.setParseTree(buildParseTree());
