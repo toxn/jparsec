@@ -3,7 +3,7 @@
   <groupId>com.movesol</groupId>
   <artifactId>jparsec-root</artifactId>
   <packaging>pom</packaging>
-  <version>3.0.2</version>
+  <version>3.0.3</version>
 
   <name>jParsec Root</name>
 
@@ -24,7 +24,7 @@
       <url>https://oss.sonatype.org/content/repositories/snapshots/</url>
     </snapshotRepository>
   </distributionManagement>
-  
+
   <licenses>
     <license>
       <name>Apache License 2.0</name>
@@ -237,8 +237,8 @@
   </build>
 
   <profiles>
-    <!-- 
-    Signing artifacts for maven central deployment 
+    <!--
+    Signing artifacts for maven central deployment
     see https://docs.sonatype.org/display/Repository/How+To+Generate+PGP+Signatures+With+Maven
     -->
     <profile>
