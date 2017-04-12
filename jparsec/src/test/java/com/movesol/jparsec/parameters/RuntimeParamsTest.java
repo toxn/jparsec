@@ -1,6 +1,6 @@
 package com.movesol.jparsec.parameters;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 import java.util.Arrays;
 import java.util.Collection;
@@ -13,12 +13,8 @@ import org.junit.runners.Parameterized;
 import com.movesol.jparsec.Parser;
 import com.movesol.jparsec.Scanners;
 import com.movesol.jparsec.Terminals;
-import com.movesol.jparsec.Parser.Mode;
 import com.movesol.jparsec.functors.Map;
 import com.movesol.jparsec.misc.Mapper;
-import com.movesol.jparsec.parameters.MapListener;
-import com.movesol.jparsec.parameters.Parameters;
-import com.movesol.jparsec.parameters.ParseLevelState;
 
 
 @RunWith(Parameterized.class)
@@ -84,8 +80,8 @@ public class RuntimeParamsTest {
           TestParameters params = (TestParameters) state.getParams();
           
           ((Node) object).setInfo(new SourceInfo(params.getFilename(), state
-              .getFirstToken().index(), state.getLastToken().index()
-              + state.getLastToken().length()));
+              .getFirstToken().index(), state.getFirstTokenIndex(), state.getLastToken().index()
+              + state.getLastToken().length(), state.getLastTokenIndex()));
         }
       }
     });
@@ -95,15 +91,23 @@ public class RuntimeParamsTest {
     Declaration decl = decls.get(0);
     assertEquals("filename", decl.getInfo().getFilename());
     assertEquals(0, decl.getInfo().getStart());
+    assertEquals(0, decl.getInfo().getStartTokenIndex());
     assertEquals(9, decl.getInfo().getEnd());
+    assertEquals(3, decl.getInfo().getEndTokenIndex());
     assertEquals(4, decl.getId().getInfo().getStart());
+    assertEquals(1, decl.getId().getInfo().getStartTokenIndex());
     assertEquals(8, decl.getId().getInfo().getEnd());
+    assertEquals(2, decl.getId().getInfo().getEndTokenIndex());
 
     decl = decls.get(1);
     assertEquals("filename", decl.getInfo().getFilename());
     assertEquals(10, decl.getInfo().getStart());
+    assertEquals(3, decl.getInfo().getStartTokenIndex());
     assertEquals(19, decl.getInfo().getEnd());
+    assertEquals(6, decl.getInfo().getEndTokenIndex());
     assertEquals(14, decl.getId().getInfo().getStart());
+    assertEquals(4, decl.getId().getInfo().getStartTokenIndex());
     assertEquals(18, decl.getId().getInfo().getEnd());
+    assertEquals(5, decl.getId().getInfo().getEndTokenIndex());
   }
 }

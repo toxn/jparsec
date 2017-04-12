@@ -999,7 +999,7 @@ public final class Parsers {
 		MapListener listener = ctxt.params.getMapListener();
 		if (listener != null && first < ((ParserState) ctxt).input.length && ctxt.lastListenerTarget != ctxt.result) {
 			listener.onMap(ctxt.result, new ParseLevelState(((ParserState) ctxt).input[first],
-					((ParserState) ctxt).input[last], ctxt.module, ctxt.params));
+					first, ((ParserState) ctxt).input[last], last + 1, ctxt.module, ctxt.params));
 			ctxt.lastListenerTarget = ctxt.result;
 		}
 
