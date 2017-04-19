@@ -997,7 +997,7 @@ public final class Parsers {
 
   protected static <T> void applyListener(ParseContext ctxt, int first, int last) {
 		MapListener listener = ctxt.params.getMapListener();
-		if (listener != null && first < ((ParserState) ctxt).input.length && ctxt.lastListenerTarget != ctxt.result) {
+		if (listener != null && first < ((ParserState) ctxt).input.length && ctxt.lastListenerTarget != ctxt.result && last != -1) {
 			listener.onMap(ctxt.result, new ParseLevelState(((ParserState) ctxt).input[first],
 					first, ((ParserState) ctxt).input[last], last + 1, ctxt.module, ctxt.params));
 			ctxt.lastListenerTarget = ctxt.result;
