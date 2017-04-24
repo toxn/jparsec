@@ -1086,4 +1086,22 @@ public abstract class Parser<T> {
 			}
   	};
   }
+  
+  /**
+   * A {@link Parser} that runs {@code this} parser if current state is in position range from {@code start} to {øcode end}.
+   * @param start
+   * @param end
+   * @return
+   */
+  public final Parser<T> position(final int start, final int end) {
+  	return new Parser<T>() {
+			@Override
+			boolean apply(ParseContext ctxt) {
+				int c = ctxt.locator.locate(ctxt.at, null).column;
+				if (!(c >= start && c < end)) return false;
+				return Parser.this.apply(ctxt);
+			}
+  	};
+  }
+
 }
