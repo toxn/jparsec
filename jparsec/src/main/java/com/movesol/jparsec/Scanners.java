@@ -558,6 +558,7 @@ public final class Scanners {
   	private CharSequence src;
 		private int pos;
 		private int initPos;
+		private int mark = -1;
 		
 		public CharacterScannerReader(CharSequence src, int pos) {
   		this.src = src;
@@ -584,6 +585,17 @@ public final class Scanners {
 		@Override
 		public void rewind() {
 			rewind(1);
+		}
+
+		@Override
+		public void mark() {
+			mark = pos;
+		}
+
+		@Override
+		public void rewindToMark() {
+			pos = mark;
+			mark = -1;
 		}
   }
   

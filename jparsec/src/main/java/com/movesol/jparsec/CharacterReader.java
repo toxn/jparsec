@@ -25,4 +25,13 @@ public interface CharacterReader {
 	 */
 	public void rewind();
 
+	/**
+	 * Mark a position in the reader
+	 */
+	public void mark();
+	
+	/**
+	 * Rewind to the last mark position and cancel the mark or does nothing if no position was marked.
+	 */
+	public void rewindToMark();
 }
