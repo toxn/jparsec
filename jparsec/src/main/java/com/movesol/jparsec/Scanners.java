@@ -568,7 +568,10 @@ public final class Scanners {
   	
 		@Override
 		public int read() {
-			if (src.length() == pos) return EOF;
+			if (src.length() == pos) {
+				pos++;
+				return EOF;
+			}
 			return src.charAt(pos++);
 		}
 
