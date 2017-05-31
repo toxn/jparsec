@@ -30,7 +30,7 @@ final class InternalFunctors {
   static TokenMap<Token> tokenWithSameValue(final Object value) {
     return new TokenMap<Token>() {
       @Override public Token map(Token token) {
-        return (value == token.value()) ? token : null;
+        return (value.equals(token.value())) ? token : null;
       }
       @Override public String toString() {
         return String.valueOf(value);
