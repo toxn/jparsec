@@ -339,12 +339,12 @@ abstract class ParseContext {
     this.at = at;
   }
   
-  final void next() {
+  void next() {
     at ++;
     step ++;
   }
   
-  final void next(int n) {
+  void next(int n) {
     at += n;
     if (n > 0) step++;
   }

@@ -15,6 +15,8 @@
  *****************************************************************************/
 package com.movesol.jparsec;
 
+import java.util.function.Predicate;
+
 import com.movesol.jparsec.parameters.Parameters;
 
 /**
@@ -52,6 +54,13 @@ final class ParserState extends ParseContext {
     super(source, result, at, module, locator, params);
     this.input = input;
     this.endIndex = endIndex;
+    
+    if (params.getParserStateFilter() != null) {
+	    	Predicate<Token> pred = params.getParserStateFilter();
+	    while (this.at < input.length && !pred.test(input[this.at])) {
+	    		this.at++;
+	    }
+    }
   }
   
   @Override char peekChar() {
@@ -66,4 +75,35 @@ final class ParserState extends ParseContext {
     if (pos >= input.length) return EOF;
     return input[pos].toString();
   }
+  
+  void next() {
+  		Predicate<Token> pred = params.getParserStateFilter();
+  		if (pred != null) {
+  			do {
+   	 		at++;
+ 			} while (at < input.length && !pred.test(input[at]));
+  		} else {
+  			at++;
+  		}
+    step ++;
+  }
+  
+  void next(int n) {
+		Predicate<Token> pred = params.getParserStateFilter();
+		if (pred != null) {
+			
+			do {
+ 	 			at++;
+ 	 			
+ 	 			if (pred.test(input[at])) {
+ 	 				n--;
+ 	 			}
+ 	 			
+			} while (at < input.length && n != 0);
+		} else {
+			at += n;
+		}
+    if (n > 0) step++;
+  }
+
 }
