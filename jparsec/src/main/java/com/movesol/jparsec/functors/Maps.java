@@ -158,6 +158,36 @@ public final class Maps {
       return "tuple";
     }
   };
+
+  @SuppressWarnings("rawtypes")
+  private static final Map6 ID6 = new Map6() {
+    @Override public Tuple6 map(Object a, Object b, Object c, Object d, Object e, Object f) {
+      return Tuples.tuple(a, b, c, d, e, f);
+    }
+    @Override public String toString() {
+      return "tuple";
+    }
+  };
+  
+  @SuppressWarnings("rawtypes")
+  private static final Map7 ID7 = new Map7() {
+    @Override public Tuple7 map(Object a, Object b, Object c, Object d, Object e, Object f, Object g) {
+      return Tuples.tuple(a, b, c, d, e, f, g);
+    }
+    @Override public String toString() {
+      return "tuple";
+    }
+  };
+
+  @SuppressWarnings("rawtypes")
+  private static final Map8 ID8 = new Map8() {
+    @Override public Tuple8 map(Object a, Object b, Object c, Object d, Object e, Object f, Object g, Object h) {
+      return Tuples.tuple(a, b, c, d, e, f, g, h);
+    }
+    @Override public String toString() {
+      return "tuple";
+    }
+  };
   
   /** A {@link Map2} object that maps 2 values into a {@link Pair} object. */
   @SuppressWarnings("unchecked")
@@ -181,6 +211,24 @@ public final class Maps {
   @SuppressWarnings("unchecked")
   public static <A, B, C, D, E> Map5<A, B, C, D, E, Tuple5<A, B, C, D, E>> toTuple5() {
     return ID5;
+  }
+
+  /** A {@link Map6} object that maps 6 values to a {@link Tuple6} object. */
+  @SuppressWarnings("unchecked")
+  public static <A, B, C, D, E, F> Map6<A, B, C, D, E, F, Tuple6<A, B, C, D, E, F>> toTuple6() {
+    return ID6;
+  }
+
+  /** A {@link Map7} object that maps 7 values to a {@link Tuple7} object. */
+  @SuppressWarnings("unchecked")
+  public static <A, B, C, D, E, F, G> Map7<A, B, C, D, E, F, G, Tuple7<A, B, C, D, E, F, G>> toTuple7() {
+    return ID7;
+  }
+
+  /** A {@link Map8} object that maps 8 values to a {@link Tuple8} object. */
+  @SuppressWarnings("unchecked")
+  public static <A, B, C, D, E, F, G, H> Map8<A, B, C, D, E, F, G, H, Tuple8<A, B, C, D, E, F, G, H>> toTuple8() {
+    return ID8;
   }
   
   private static final Unary<Object> ID = new Unary<Object>() {

@@ -49,4 +49,20 @@ public final class Tuples {
   public static <A, B, C, D, E> Tuple5<A, B, C, D, E> tuple(A a, B b, C c, D d, E e) {
     return new Tuple5<A, B, C, D, E>(a, b, c, d, e);
   }
+
+  /** Returns a {@link Tuple6} of 6 objects. */
+  public static <A, B, C, D, E, F> Tuple6<A, B, C, D, E, F> tuple(A a, B b, C c, D d, E e, F f) {
+    return new Tuple6<A, B, C, D, E, F>(a, b, c, d, e, f);
+  }
+
+  /** Returns a {@link Tuple7} of 7 objects. */
+  public static <A, B, C, D, E, F, G> Tuple7<A, B, C, D, E, F, G> tuple(A a, B b, C c, D d, E e, F f, G g) {
+    return new Tuple7<A, B, C, D, E, F, G>(a, b, c, d, e, f, g);
+  }
+
+  /** Returns a {@link Tuple8} of 8 objects. */
+  public static <A, B, C, D, E, F, G, H> Tuple8<A, B, C, D, E, F, G, H> tuple(A a, B b, C c, D d, E e, F f, G g, H h) {
+    return new Tuple8<A, B, C, D, E, F, G, H>(a, b, c, d, e, f, g, h);
+  }
+
 }

@@ -24,11 +24,15 @@ import com.movesol.jparsec.functors.Map2;
 import com.movesol.jparsec.functors.Map3;
 import com.movesol.jparsec.functors.Map4;
 import com.movesol.jparsec.functors.Map5;
+import com.movesol.jparsec.functors.Map6;
+import com.movesol.jparsec.functors.Map7;
+import com.movesol.jparsec.functors.Map8;
 import com.movesol.jparsec.functors.Maps;
 import com.movesol.jparsec.functors.Pair;
 import com.movesol.jparsec.functors.Tuple3;
 import com.movesol.jparsec.functors.Tuple4;
 import com.movesol.jparsec.functors.Tuple5;
+import com.movesol.jparsec.functors.Tuple6;
 import com.movesol.jparsec.internal.annotations.Private;
 import com.movesol.jparsec.internal.util.Lists;
 import com.movesol.jparsec.parameters.MapListener;
@@ -295,6 +299,16 @@ public final class Parsers {
       Parser<? extends D> p4, Parser<? extends E> p5) {
     return sequence(p1, p2, p3, p4, p5, Maps.<A, B, C, D, E > toTuple5());
   }
+
+  /**
+   * A {@link Parser} that sequentially runs 6 parser objects and collects the results in a
+   * {@link Tuple6} object.
+   */
+  public static <A,B,C,D,E,F> Parser<Tuple6<A,B,C,D,E,F>> tuple(
+      Parser<? extends A> p1, Parser<? extends B> p2, Parser<? extends C> p3,
+      Parser<? extends D> p4, Parser<? extends E> p5, Parser<? extends F> p6) {
+    return sequence(p1, p2, p3, p4, p5, p6, Maps.<A, B, C, D, E, F> toTuple6());
+  }
   
   /**
    * A {@link Parser} that sequentially runs {@code parsers} one by one and collects the return
@@ -455,6 +469,123 @@ public final class Parsers {
         if (!r5) return false;
         E o5 = p5.getReturn(ctxt);
         ctxt.result = map.map(o1, o2, o3, o4, o5);
+        return true;
+      }
+      @Override public String toString() {
+        return map.toString();
+      }
+    };
+  }
+  
+  /** 
+   * A {@link Parser} that runs 6 parser objects sequentially and transforms the return values
+   * using {@code map}.
+   */
+  public static <A, B, C, D, E, F, T> Parser<T> sequence(
+      final Parser<A> p1, final Parser<B> p2, final Parser<C> p3, final Parser<D> p4, final Parser<E> p5, final Parser<F> p6,
+      final Map6<? super A, ? super B, ? super C, ? super D, ? super E, ? super F, ? extends T> map) {
+    return new Parser<T>() {
+      @Override boolean apply(ParseContext ctxt) {
+        boolean r1 = p1.apply(ctxt);
+        if (!r1) return false;
+        A o1 = p1.getReturn(ctxt);
+        boolean r2 = p2.apply(ctxt);
+        if (!r2) return false;
+        B o2 = p2.getReturn(ctxt);
+        boolean r3 = p3.apply(ctxt);
+        if (!r3) return false;
+        C o3 = p3.getReturn(ctxt);
+        boolean r4 = p4.apply(ctxt);
+        if (!r4) return false;
+        D o4 = p4.getReturn(ctxt);
+        boolean r5 = p5.apply(ctxt);
+        if (!r5) return false;
+        E o5 = p5.getReturn(ctxt);
+        boolean r6 = p6.apply(ctxt);
+        if (!r6) return false;
+        F o6 = p6.getReturn(ctxt);
+        ctxt.result = map.map(o1, o2, o3, o4, o5, o6);
+        return true;
+      }
+      @Override public String toString() {
+        return map.toString();
+      }
+    };
+  }
+  
+  /** 
+   * A {@link Parser} that runs 7 parser objects sequentially and transforms the return values
+   * using {@code map}.
+   */
+  public static <A, B, C, D, E, F, G, T> Parser<T> sequence(
+      final Parser<A> p1, final Parser<B> p2, final Parser<C> p3, final Parser<D> p4, final Parser<E> p5, final Parser<F> p6, final Parser<G> p7,
+      final Map7<? super A, ? super B, ? super C, ? super D, ? super E, ? super F, ? super G, ? extends T> map) {
+    return new Parser<T>() {
+      @Override boolean apply(ParseContext ctxt) {
+        boolean r1 = p1.apply(ctxt);
+        if (!r1) return false;
+        A o1 = p1.getReturn(ctxt);
+        boolean r2 = p2.apply(ctxt);
+        if (!r2) return false;
+        B o2 = p2.getReturn(ctxt);
+        boolean r3 = p3.apply(ctxt);
+        if (!r3) return false;
+        C o3 = p3.getReturn(ctxt);
+        boolean r4 = p4.apply(ctxt);
+        if (!r4) return false;
+        D o4 = p4.getReturn(ctxt);
+        boolean r5 = p5.apply(ctxt);
+        if (!r5) return false;
+        E o5 = p5.getReturn(ctxt);
+        boolean r6 = p6.apply(ctxt);
+        if (!r6) return false;
+        F o6 = p6.getReturn(ctxt);
+        boolean r7 = p7.apply(ctxt);
+        if (!r7) return false;
+        G o7 = p7.getReturn(ctxt);
+        ctxt.result = map.map(o1, o2, o3, o4, o5, o6, o7);
+        return true;
+      }
+      @Override public String toString() {
+        return map.toString();
+      }
+    };
+  }
+  
+  /** 
+   * A {@link Parser} that runs 7 parser objects sequentially and transforms the return values
+   * using {@code map}.
+   */
+  public static <A, B, C, D, E, F, G, H, T> Parser<T> sequence(
+      final Parser<A> p1, final Parser<B> p2, final Parser<C> p3, final Parser<D> p4, final Parser<E> p5, final Parser<F> p6, final Parser<G> p7, final Parser<H> p8,
+      final Map8<? super A, ? super B, ? super C, ? super D, ? super E, ? super F, ? super G, ? super H, ? extends T> map) {
+    return new Parser<T>() {
+      @Override boolean apply(ParseContext ctxt) {
+        boolean r1 = p1.apply(ctxt);
+        if (!r1) return false;
+        A o1 = p1.getReturn(ctxt);
+        boolean r2 = p2.apply(ctxt);
+        if (!r2) return false;
+        B o2 = p2.getReturn(ctxt);
+        boolean r3 = p3.apply(ctxt);
+        if (!r3) return false;
+        C o3 = p3.getReturn(ctxt);
+        boolean r4 = p4.apply(ctxt);
+        if (!r4) return false;
+        D o4 = p4.getReturn(ctxt);
+        boolean r5 = p5.apply(ctxt);
+        if (!r5) return false;
+        E o5 = p5.getReturn(ctxt);
+        boolean r6 = p6.apply(ctxt);
+        if (!r6) return false;
+        F o6 = p6.getReturn(ctxt);
+        boolean r7 = p7.apply(ctxt);
+        if (!r7) return false;
+        G o7 = p7.getReturn(ctxt);
+        boolean r8 = p8.apply(ctxt);
+        if (!r7) return false;
+        H o8 = p8.getReturn(ctxt);
+        ctxt.result = map.map(o1, o2, o3, o4, o5, o6, o7, o8);
         return true;
       }
       @Override public String toString() {
