@@ -3,7 +3,7 @@
   <parent>
     <groupId>com.movesol</groupId>
     <artifactId>jparsec-root</artifactId>
-    <version>3.0.10</version>
+    <version>3.0.11</version>
     <relativePath>../pom.xml</relativePath>
   </parent>
   <artifactId>jparsec-testutils</artifactId>
