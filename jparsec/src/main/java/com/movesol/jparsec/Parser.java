@@ -874,8 +874,9 @@ public abstract class Parser<T> {
     	Location l = null;
     	if (loc != null) {
     		l = loc.locate(state.errorIndex(), state.input[state.at].module());
-    	}
-    	throw new ParserException(state.renderError(),  state.input[state.at].module(), l);
+      }
+        state.fail(new ParserException(state.renderError(),  state.input[state.at].module(), l));
+        return null;
     }
 
     if (!Parsers.EOF.apply(state)) {
@@ -883,7 +884,8 @@ public abstract class Parser<T> {
     	if (loc != null) {
     		l = loc.locate(state.errorIndex(), state.input[state.at].module());
     	}
-     	throw new ParserException(state.renderError(), state.input[state.at].module(), l);
+       state.fail(new ParserException(state.renderError(), state.input[state.at].module(), l));
+       return null;
     }
     
     return getReturn(state);
@@ -1017,8 +1019,14 @@ public abstract class Parser<T> {
         state.enableTrace("root");
         return state.run(parser.followedBy(Parsers.EOF));
       }
-    }
-    ;
+    },
+    LENIENT{
+      @Override <T> T run(Parser<T> parser, CharSequence source, String module, Parameters params) {
+        ScannerState state = new ScannerState(source, params);
+        state.enableLenient();
+        return state.run(parser.followedBy(Parsers.EOF));
+      }
+    };
     abstract <T> T run(Parser<T> parser, CharSequence source, String module, Parameters params);
   }
 
