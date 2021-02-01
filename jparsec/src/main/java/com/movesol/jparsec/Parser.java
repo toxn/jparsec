@@ -437,6 +437,18 @@ public abstract class Parser<T> {
     return ifelse(Maps.constant(consequence), alternative);
   }
 
+  public final <R> Parser<R> recover(final Map<Location, ? extends Parser<? extends R>> alternative) {
+    return new Parser<R>() {
+      @Override
+      boolean apply(ParseContext ctxt) {
+        if (!ctxt.withErrorSuppressed(Parser.this)) {
+          Parser<? extends R> parser = alternative.map(ctxt.locator.locate(ctxt.errorIndex(), ctxt.module));
+          return parser.apply(ctxt);
+        }
+      }
+    }
+  }
+
   /**
    * A {@link Parser} that runs {@code consequence} if {@code this} succeeds, or {@code alternative} otherwise.
    */
