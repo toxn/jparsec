@@ -22,6 +22,7 @@ import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
 
 import com.movesol.jparsec.error.Location;
+import com.movesol.jparsec.error.ParseErrorDetails;
 import com.movesol.jparsec.error.ParserException;
 import com.movesol.jparsec.functors.Map;
 import com.movesol.jparsec.functors.Map2;
@@ -437,16 +438,48 @@ public abstract class Parser<T> {
     return ifelse(Maps.constant(consequence), alternative);
   }
 
-  public final <R> Parser<R> recover(final Map<Location, ? extends Parser<? extends R>> alternative) {
+  public final <R> Parser<R> recover(final Map<ParseErrorDetails, R> handler, final Parser<Void> accepted) {
     return new Parser<R>() {
       @Override
       boolean apply(ParseContext ctxt) {
+        final int stepBefore = ctxt.step;
+        final int atBefore = ctxt.at;
+
         if (!ctxt.withErrorSuppressed(Parser.this)) {
-          Parser<? extends R> parser = alternative.map(ctxt.locator.locate(ctxt.errorIndex(), ctxt.module));
+          final ParseErrorDetails ped = ctxt.renderError();
+          ctxt.setAt(stepBefore, atBefore);
+          if (ctxt.withErrorSuppressed(accepted)) {
+            ctxt.setAt(stepBefore, atBefore);
+          } else {
+            ctxt.result = handler.map(ped);
+          }
+        } 
+        return true;
+      }
+    };
+  }
+  
+  /**
+   * A {@link Parser} that runs {@code consequence} if {@code this} succeeds, or {@code alternative} otherwise.
+   */
+  public final <R> Parser<R> ifelse(
+      final Map<? super T, ? extends Parser<? extends R>> consequence,
+      final Map<ParseErrorDetails, Parser<? extends R>> alternative) {
+    return new Parser<R>() {
+      @Override boolean apply(ParseContext ctxt) {
+        final Object ret = ctxt.result;
+        final int step = ctxt.step;
+        final int at = ctxt.at;
+        if (ctxt.withErrorSuppressed(Parser.this)) {
+          Parser<? extends R> parser = consequence.map(Parser.this.getReturn(ctxt));
           return parser.apply(ctxt);
-        } else {
-        	return true;
         }
+        final ParseErrorDetails ped = ctxt.renderError();
+        ctxt.set(step, at, ret);
+        return alternative.map(ped).apply(ctxt);
+      }
+      @Override public String toString() {
+        return "ifelse";
       }
     };
   }
