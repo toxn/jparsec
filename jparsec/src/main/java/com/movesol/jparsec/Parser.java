@@ -442,12 +442,10 @@ public abstract class Parser<T> {
     return new Parser<R>() {
       @Override
       boolean apply(ParseContext ctxt) {
-        final int stepBefore = ctxt.step;
-        final int atBefore = ctxt.at;
-
-        if (!ctxt.withErrorSuppressed(Parser.this)) {
+        if (!Parser.this.apply(ctxt)) {
+          final int stepBefore = ctxt.step;
+          final int atBefore = ctxt.at;
           final ParseErrorDetails ped = ctxt.renderError();
-          ctxt.setAt(stepBefore, atBefore);
           if (ctxt.withErrorSuppressed(accepted)) {
             ctxt.setAt(stepBefore, atBefore);
           } else {
