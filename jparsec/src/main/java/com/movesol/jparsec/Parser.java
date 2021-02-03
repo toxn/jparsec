@@ -437,25 +437,42 @@ public abstract class Parser<T> {
   public final <R> Parser<R> ifelse(Parser<? extends R> consequence, Parser<? extends R> alternative) {
     return ifelse(Maps.constant(consequence), alternative);
   }
-
+  
+	/**
+	 * A {@link Parser} that runs {@code handler} if {@code this} fails and
+	 * {@code accepted} also fails on the Token that triggered an error in
+	 * {@code this}. The result it that of {@code handler}.
+	 */
   public final <R> Parser<R> recover(final Map<ParseErrorDetails, R> handler, final Parser<Void> accepted) {
-    return new Parser<R>() {
-      @Override
-      boolean apply(ParseContext ctxt) {
-        if (!Parser.this.apply(ctxt)) {
-          final int stepBefore = ctxt.step;
-          final int atBefore = ctxt.at;
-          final ParseErrorDetails ped = ctxt.renderError();
-          if (ctxt.withErrorSuppressed(accepted)) {
-            ctxt.setAt(stepBefore, atBefore);
-          } else {
-            ctxt.result = handler.map(ped);
-          }
-        } 
-        return true;
-      }
-    };
+    return recover(handler, accepted, null);
   }
+  
+	/**
+	 * A {@link Parser} that runs {@code consumer} while ignoring its result if
+	 * {@code this} fails and {@code accepted} also fails on the Token that
+	 * triggered an error in {@code this}. The result it that of {@code handler}.
+	 */
+  public final <R> Parser<R> recover(final Map<ParseErrorDetails, R> handler, final Parser<Void> accepted, final Parser<Void> consumer) {
+	    return new Parser<R>() {
+	      @Override
+	      boolean apply(ParseContext ctxt) {
+	        if (!Parser.this.apply(ctxt)) {
+	          final int stepBefore = ctxt.step;
+	          final int atBefore = ctxt.at;
+	          final ParseErrorDetails ped = ctxt.renderError();
+	          if (ctxt.withErrorSuppressed(accepted)) {
+	            ctxt.setAt(stepBefore, atBefore);
+	          } else {
+	        	if(consumer != null) {
+	        		consumer.apply(ctxt);
+	        	}
+	            ctxt.result = handler.map(ped);
+	          }
+	        } 
+	        return true;
+	      }
+	    };
+	  }
   
   /**
    * A {@link Parser} that runs {@code consequence} if {@code this} succeeds, or {@code alternative} otherwise.
