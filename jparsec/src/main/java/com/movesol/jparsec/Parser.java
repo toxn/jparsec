@@ -443,7 +443,7 @@ public abstract class Parser<T> {
 	 * {@code accepted} also fails on the Token that triggered an error in
 	 * {@code this}. The result it that of {@code handler}.
 	 */
-  public final <R> Parser<R> recover(final Map<ParseErrorDetails, R> handler, final Parser<Void> accepted) {
+  public final Parser<T> recover(final Map<ParseErrorDetails, ? extends T> handler, final Parser<Void> accepted) {
     return recover(handler, accepted, null);
   }
   
@@ -452,8 +452,8 @@ public abstract class Parser<T> {
 	 * {@code this} fails and {@code accepted} also fails on the Token that
 	 * triggered an error in {@code this}. The result it that of {@code handler}.
 	 */
-  public final <R> Parser<R> recover(final Map<ParseErrorDetails, R> handler, final Parser<Void> accepted, final Parser<Void> consumer) {
-	    return new Parser<R>() {
+  public final Parser<T> recover(final Map<ParseErrorDetails, ? extends T> handler, final Parser<Void> accepted, final Parser<Void> consumer) {
+	    return new Parser<T>() {
 	      @Override
 	      boolean apply(ParseContext ctxt) {
 	        if (!Parser.this.apply(ctxt)) {
@@ -463,9 +463,9 @@ public abstract class Parser<T> {
 	          if (ctxt.withErrorSuppressed(accepted)) {
 	            ctxt.setAt(stepBefore, atBefore);
 	          } else {
-	        	if(consumer != null) {
-	        		consumer.apply(ctxt);
-	        	}
+  	        	if(consumer != null) {
+  	        		consumer.apply(ctxt);
+  	        	}
 	            ctxt.result = handler.map(ped);
 	          }
 	        } 
@@ -485,7 +485,7 @@ public abstract class Parser<T> {
         final Object ret = ctxt.result;
         final int step = ctxt.step;
         final int at = ctxt.at;
-        if (ctxt.withErrorSuppressed(Parser.this)) {
+        if (Parser.this.apply(ctxt)) {
           Parser<? extends R> parser = consequence.map(Parser.this.getReturn(ctxt));
           return parser.apply(ctxt);
         }
