@@ -15,6 +15,8 @@
  *****************************************************************************/
 package com.movesol.jparsec;
 
+import static java.lang.Integer.max;
+
 import java.io.IOException;
 import java.nio.CharBuffer;
 import java.util.Collection;
@@ -457,18 +459,23 @@ public abstract class Parser<T> {
 	      @Override
 	      boolean apply(ParseContext ctxt) {
 	        if (!Parser.this.apply(ctxt)) {
-	          final int stepBefore = ctxt.step;
-	          final int atBefore = ctxt.at;
+	          final int stepBeforeAccepted = ctxt.step;
+	          final int atBeforeAccepted = ctxt.at;
 	          final ParseErrorDetails ped = ctxt.renderError();
 	          if (ctxt.withErrorSuppressed(accepted)) {
-	            ctxt.setAt(stepBefore, atBefore);
+	            ctxt.setAt(stepBeforeAccepted, atBeforeAccepted);
+	            return false;
 	          } else {
   	        	if(consumer != null) {
-  	        		consumer.apply(ctxt);
+  	        		int stepBeforeConsumer = ctxt.step;
+
+  	        		while (!(ctxt.withErrorSuppressed(consumer))) {
+  	        			ctxt.setAt(stepBeforeConsumer, ctxt.at + 1);
+  	        		}
   	        	}
 	            ctxt.result = handler.map(ped);
 	          }
-	        } 
+	        }
 	        return true;
 	      }
 	    };
