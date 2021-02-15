@@ -21,6 +21,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
 
+import com.movesol.jparsec.ParseContext.ErrorType;
 import com.movesol.jparsec.error.Location;
 import com.movesol.jparsec.error.ParseErrorDetails;
 import com.movesol.jparsec.error.ParserException;
@@ -457,21 +458,26 @@ public abstract class Parser<T> {
 	      @Override
 	      boolean apply(ParseContext ctxt) {
 	        if (!Parser.this.apply(ctxt)) {
+	        	if (ctxt.isEof()) {
+	        		ctxt.raise(ErrorType.UNEXPECTED, "EOF");
+	        		return false;
+	        	}
+	        	
 	          final int stepBeforeAccepted = ctxt.step;
 	          final int atBeforeAccepted = ctxt.at;
 	          final ParseErrorDetails ped = ctxt.renderError();
+
 	          if (ctxt.withErrorSuppressed(accepted)) {
 	            ctxt.setAt(stepBeforeAccepted, atBeforeAccepted);
 	            return false;
 	          } else {
   	        	if(consumer != null) {
-  	        		int stepBeforeConsumer = ctxt.step;
-
-  	        		while (!(ctxt.withErrorSuppressed(consumer))) {
-  	        			ctxt.setAt(stepBeforeConsumer, ctxt.at + 1);
+  	        		while (!(ctxt.isEof() || ctxt.applyAsDelimiter(consumer))) {
+  	        			ctxt.at++;
   	        		}
+  	        	} else {
+  	        		ctxt.next();
   	        	}
-  	        	ctxt.step++;
 	            ctxt.result = handler.map(ped);
 	          }
 	        }
@@ -488,9 +494,15 @@ public abstract class Parser<T> {
       final Map<ParseErrorDetails, Parser<? extends R>> alternative) {
     return new Parser<R>() {
       @Override boolean apply(ParseContext ctxt) {
+      	if (ctxt.isEof()) {
+      		ctxt.raise(ErrorType.UNEXPECTED, "EOF");
+      		return false;
+      	}
+      	
         final Object ret = ctxt.result;
         final int step = ctxt.step;
         final int at = ctxt.at;
+        
         if (Parser.this.apply(ctxt)) {
           Parser<? extends R> parser = consequence.map(Parser.this.getReturn(ctxt));
           return parser.apply(ctxt);
