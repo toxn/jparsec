@@ -15,8 +15,6 @@
  *****************************************************************************/
 package com.movesol.jparsec;
 
-import static java.lang.Integer.max;
-
 import java.io.IOException;
 import java.nio.CharBuffer;
 import java.util.Collection;
@@ -473,6 +471,7 @@ public abstract class Parser<T> {
   	        			ctxt.setAt(stepBeforeConsumer, ctxt.at + 1);
   	        		}
   	        	}
+  	        	ctxt.step++;
 	            ctxt.result = handler.map(ped);
 	          }
 	        }
