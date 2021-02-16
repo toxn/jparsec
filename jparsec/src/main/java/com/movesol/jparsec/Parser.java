@@ -479,6 +479,9 @@ public abstract class Parser<T> {
   	        		ctxt.next();
   	        	}
 	            ctxt.result = handler.map(ped);
+	  					if (ctxt instanceof ParserState) {
+	  						Parsers.applyListener(ctxt, atBeforeAccepted, ctxt.at - 1);
+	  					}
 	          }
 	        }
 	        return true;
